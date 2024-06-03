@@ -114,18 +114,18 @@
 
 ## Possible Updates and Future Plans
 
-### Database Enhancement
+#### Database Enhancement
 
 - **Move to MongoDB**: Transition from the current file-based storage to a MongoDB database to enhance scalability and reliability.
 - **Cloud Integration**: Integrate with cloud-based MongoDB services like MongoDB Atlas for seamless data management and backups.
 
-### Frontend Development and UI/UX Enhancements
+#### Frontend Development and UI/UX Enhancements
 
 - **React/Next.js Frontend**: Web app for managing notes.
 - **API Integration**: Create a RESTful API or GraphQL backend to enable the frontend to interact with the note management system.
 - **Responsive Design**:
 
-### Additional Features
+#### Additional Features
 
 - **User Authentication**: Implement user authentication and authorization to provide secure access to notes.
 - **Tag Management**: Add features for better tag management, such as tag suggestions, tag editing, and tag-based filtering.
@@ -133,7 +133,7 @@
 - **Search Improvements**: Enhance the search functionality with advanced filtering options, such as search by date range, tag, and more.
 - **Mobile App**: Probably not gonna happen :(
 
-### Performance Improvements
+#### Performance Improvements
 
 - **Caching**: Implement caching strategies to improve the performance of the web application.
 - **Optimized Loading**: Optimize the loading times for large datasets and enhance the overall performance of the application.
