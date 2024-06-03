@@ -19,13 +19,18 @@ const argv = yargs(process.argv.slice(2))
         describe: "Display the list of notes in storage",
         type: "boolean",
     })
+    .option("tags", {
+        alias: "t",
+        type: "string",
+        description: "tags to add to the note for search",
+    })
     .help("h")
     .alias("h", "help")
     .parse();
 
 async function main() {
     if (argv.note) {
-        const result = handleIncomingNote(argv.note);
+        const result = handleIncomingNote(argv.note, argv.tags);
         console.log(result);
         await file.writeToFile(JSON.stringify(result), "./data/myData.txt");
     } else if (argv.see) {
@@ -36,14 +41,18 @@ async function main() {
     }
 }
 
-function handleIncomingNote(note) {
+function handleIncomingNote(note, tagsInputs) {
+    const tags = tagsInputs
+        ? tagsInputs.split(",").map((tag) => tag.trim())
+        : [];
     return {
         content: note,
         id: Date.now(),
+        tags: tags,
     };
 }
 
 main().catch((error) => {
     console.error("An error occurred:", error);
-    process.exit(1); // Exit with non-zero status code to indicate failure
+    process.exit(1);
 });
