@@ -12,33 +12,38 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .note {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .notes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
-        .note h3 {
-            margin-top: 0;
-            font-size: 20px;
-            color: #333333;
+        .note {
+            background: rgba(179, 179, 179, 0.1);
+            border: 1px solid rgba(68, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
         }
 
         .note p {
-            font-size: 16px;
-            color: #666666;
+            margin-top: 0;
+            color: #646464;
+        }
+
+        .note h4 {
+            color: #ffffff;
         }
 
         .tags {
@@ -47,13 +52,13 @@
 
         .tag {
             display: inline-block;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             margin: 0 5px 5px 0;
-            padding: 5px 10px;
-            background-color: salmon;
+            padding: 3px 8px;
+            border: 1px solid #ff6347;
             border-radius: 8px;
-            color: #ffffff;
+            color: #ff6347;
         }
     </style>
 </head>
@@ -61,14 +66,6 @@
 <body>
     <div class="container">
         <div class="notes">
-            <div class="note">
-                <h3>Note ID: 1</h3>
-                <p>Note content goes here...</p>
-                <div class="tags">
-                    <span class="tag">Tag1</span>
-                    <span class="tag">Tag2</span>
-                </div>
-            </div>
             {{ notes }}
         </div>
     </div>
