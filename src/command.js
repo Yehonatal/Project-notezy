@@ -19,6 +19,10 @@ const argv = yargs(process.argv.slice(2))
         describe: "Display the list of notes in storage",
         type: "boolean",
     })
+    .option("v", {
+        alias: "version",
+        describe: "Current version of notezy",
+    })
     .help("h")
     .alias("h", "help")
     .parse();
