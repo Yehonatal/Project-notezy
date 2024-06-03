@@ -1,58 +1,105 @@
 import yargs from "yargs";
-import * as file from "./utils/index.js";
+import { hideBin } from "yargs/helpers";
+import {
+    newNote,
+    getAllNotes,
+    findNotes,
+    removeNote,
+    removeAllNotes,
+} from "./notes.js";
+import { listNotes } from "./util.js";
 
-const argv = yargs(process.argv.slice(2))
+yargs(hideBin(process.argv))
     .scriptName("notezy")
     .usage(
-        "$0 [note]",
+        "$0 new <note>",
         "A not so simple CLI tool that stores notes.",
         (yargs) => {
             yargs.positional("note", {
                 describe: "The note you want to store",
                 type: "string",
             });
+        },
+        async (argv) => {
+            const tags = argv.tags
+                ? argv.tags.split(",").map((tag) => tag.trim())
+                : [];
+            const note = await newNote(argv.note, tags);
+            console.log("Note added!", note.id);
         }
     )
     .version()
-    .option("s", {
-        alias: "see",
-        describe: "Display the list of notes in storage",
-        type: "boolean",
-    })
     .option("tags", {
         alias: "t",
         type: "string",
         description: "tags to add to the note for search",
     })
+    .command(
+        "all",
+        "get all notes",
+        () => {},
+        async (argv) => {
+            const notes = await getAllNotes();
+            listNotes(notes);
+        }
+    )
+    .command(
+        "find <filter>",
+        "get matching notes",
+        (yargs) => {
+            return yargs.positional("filter", {
+                describe:
+                    "The search term to filter notes by, will be applied to note.content",
+                type: "string",
+            });
+        },
+        async (argv) => {
+            const notes = await findNotes(argv.filter);
+            listNotes(notes);
+        }
+    )
+    .command(
+        "remove <id>",
+        "remove a note by id",
+        (yargs) => {
+            return yargs.positional("id", {
+                type: "number",
+                description: "The id of the note you want to remove",
+            });
+        },
+        async (argv) => {
+            const id = await removeNote(argv.id);
+            if (id) {
+                console.log("Note removed: ", id);
+            } else {
+                console.log("Note not found");
+            }
+        }
+    )
+    .command(
+        "web [port]",
+        "launch website to see notes",
+        (yargs) => {
+            return yargs.positional("port", {
+                describe: "port to bind on",
+                default: 5000,
+                type: "number",
+            });
+        },
+        async (argv) => {
+            const notes = await getAllNotes();
+            start(notes, argv.port);
+        }
+    )
+    .command(
+        "clean",
+        "remove all notes",
+        () => {},
+        async (argv) => {
+            await removeAllNotes();
+            console.log("All notes removed");
+        }
+    )
     .help("h")
     .alias("h", "help")
     .parse();
-
-async function main() {
-    if (argv.note) {
-        const result = handleIncomingNote(argv.note, argv.tags);
-        console.log(result);
-        await file.writeToFile(JSON.stringify(result), "./data/myData.txt");
-    } else if (argv.see) {
-        const data = await file.readFromFile("./data/myData.txt");
-        console.log(data);
-    } else {
-        console.log("No command specified. Use --help for usage information.");
-    }
-}
-
-function handleIncomingNote(note, tagsInputs) {
-    const tags = tagsInputs
-        ? tagsInputs.split(",").map((tag) => tag.trim())
-        : [];
-    return {
-        content: note,
-        id: Date.now(),
-        tags: tags,
-    };
-}
-
-main().catch((error) => {
-    console.error("An error occurred:", error);
-    process.exit(1);
-});
